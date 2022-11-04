@@ -27,12 +27,16 @@
                 $objUser->setId($userData['id']);
                 if ($objUser->updateLoginStatus()) {
                     echo "User login..";
+                    $_SESSION['user'][$userData['id']] = $userData;
                 } else {
                     echo "Failed to login.";
                 }
             } else {
                 if ($objUser->save()) {
-                    echo "User Registred..";
+                    $lastId = $objUser->dbConn->lastInsertId();
+                    $objUser->setId($lastId);
+                    $_SESSION['user'][$userData['id']] = (array) $objUser;
+                    echo "User Registred..";                
                 } else {
                     echo "Failed..";
                 }
