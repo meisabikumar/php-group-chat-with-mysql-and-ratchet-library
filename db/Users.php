@@ -105,4 +105,12 @@ class users
             echo $e->getMessage();
         }
     }
+
+    public function getAllUsers()
+    {
+        $stmt = $this->dbConn->prepare("SELECT * FROM users");
+        $stmt->execute();
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $users;
+    }
 }
