@@ -74,4 +74,35 @@ class users
             echo $e->getMessage();
         }
     }
+
+    public function getUserByEmail()
+    {
+        $stmt = $this->dbConn->prepare('SELECT * FROM users WHERE email = :email');
+        $stmt->bindParam(':email', $this->email);
+        try {
+            if ($stmt->execute()) {
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        return $user;
+    }
+
+    public function updateLoginStatus()
+    {
+        $stmt = $this->dbConn->prepare('UPDATE users SET login_status = :loginStatus, last_login = :lastLogin WHERE id = :id');
+        $stmt->bindParam(':loginStatus', $this->loginStatus);
+        $stmt->bindParam(':lastLogin', $this->lastLogin);
+        $stmt->bindParam(':id', $this->id);
+        try {
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 }

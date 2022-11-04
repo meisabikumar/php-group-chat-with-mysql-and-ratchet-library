@@ -22,10 +22,20 @@
             $objUser->setName($_POST['uname']);
             $objUser->setLoginStatus(1);
             $objUser->setLastLogin(date('Y-m-d h:i:s'));
-            if ($objUser->save()) {
-                echo "User Registred..";
+            $userData = $objUser->getUserByEmail();
+            if (is_array($userData) && count($userData) > 0) {
+                $objUser->setId($userData['id']);
+                if ($objUser->updateLoginStatus()) {
+                    echo "User login..";
+                } else {
+                    echo "Failed to login.";
+                }
             } else {
-                echo "Failed..";
+                if ($objUser->save()) {
+                    echo "User Registred..";
+                } else {
+                    echo "Failed..";
+                }
             }
         }
         ?>
