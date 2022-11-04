@@ -89,6 +89,20 @@ class users
         return $user;
     }
 
+    public function getUserById()
+    {
+        $stmt = $this->dbConn->prepare('SELECT * FROM users WHERE id = :id');
+        $stmt->bindParam(':id', $this->id);
+        try {
+            if ($stmt->execute()) {
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        return $user;
+    }
+
     public function updateLoginStatus()
     {
         $stmt = $this->dbConn->prepare('UPDATE users SET login_status = :loginStatus, last_login = :lastLogin WHERE id = :id');
