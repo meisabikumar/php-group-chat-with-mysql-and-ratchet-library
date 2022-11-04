@@ -28,6 +28,7 @@
                 if ($objUser->updateLoginStatus()) {
                     echo "User login..";
                     $_SESSION['user'][$userData['id']] = $userData;
+                    header("location: chatroom.php");
                 } else {
                     echo "Failed to login.";
                 }
@@ -36,7 +37,8 @@
                     $lastId = $objUser->dbConn->lastInsertId();
                     $objUser->setId($lastId);
                     $_SESSION['user'][$userData['id']] = (array) $objUser;
-                    echo "User Registred..";                
+                    echo "User Registred..";
+                    header("location: chatroom.php");
                 } else {
                     echo "Failed..";
                 }
