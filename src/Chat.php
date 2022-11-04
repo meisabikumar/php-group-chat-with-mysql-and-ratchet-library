@@ -4,7 +4,9 @@ namespace MyApp;
 
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
-require "../db/users.php";
+
+require "../db/Users.php";
+require "../db/Chatrooms.php";
 
 class Chat implements MessageComponentInterface
 {
@@ -35,18 +37,26 @@ class Chat implements MessageComponentInterface
             $numRecv == 1 ? '' : 's'
         );
         $data = json_decode($msg, true);
-        $objUser = new \users;
-        $objUser->setId($data['userId']);
-        $user = $objUser->getUserById();
-        $data['from'] = $user['name'];
-        $data['msg']  = $data['msg'];
-        $data['dt']  = date("d-m-Y h:i:s");
+        $objChatroom = new \Chatrooms;
+        $objChatroom->setUserId($data['userId']);
+        $objChatroom->setMsg($data['msg']);
+        $objChatroom->setCreatedOn(date("Y-m-d h:i:s"));
+        if ($objChatroom->saveChatRoom()) {
+            $objUser = new \Users;
+            $objUser->setId($data['userId']);
+            $user = $objUser->getUserById();
+            $data['from'] = $user['name'];
+            $data['msg']  = $data['msg'];
+            $data['dt']  = date("d-m-Y h:i:s");
+        }
 
-        foreach ($this->clients as $client) {
-            // if ($from !== $client) {
-                // The sender is not the receiver, send to each client connected
-                $client->send(json_encode($data));
-            // }
+        foreach ($this->clients as $client) {      
+            if ($from == $client) {
+                $data['from']  = "Me";
+            } else {
+                $data['from']  = $user['name'];
+            }
+            $client->send(json_encode($data));
         }
     }
 
