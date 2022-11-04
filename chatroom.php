@@ -22,9 +22,12 @@
                     header("location: index.php");
                 }
                 require("db/Users.php");
+                require("db/Chatrooms.php");
 
+                $objChatroom = new chatrooms;
+                $chatrooms   = $objChatroom->getAllChatRooms();
 
-                $objUser = new Users;
+                $objUser = new users;
                 $users   = $objUser->getAllUsers();
                 ?>
                 <table class="table table-striped">
@@ -74,7 +77,17 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php
+                            foreach ($chatrooms as $key => $chatroom) {
 
+                                if ($userId == $chatroom['userid']) {
+                                    $from = "Me";
+                                } else {
+                                    $from = $chatroom['name'];
+                                }
+                                echo '<tr><td valign="top"><div><strong>' . $from . '</strong></div><div>' . $chatroom['msg'] . '</div><td align="right" valign="top">' . date("d/m/Y h:i:s A", strtotime($chatroom['created_on'])) . '</td></tr>';
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -109,6 +122,10 @@
             $('#chats > tbody').prepend(row);
         };
 
+        conn.onclose = function(e) {
+			console.log("Connection Closed!");
+		}
+
         $("#send").click(function() {
             var userId = $("#userId").val();
             var msg = $("#msg").val();
@@ -119,6 +136,25 @@
             conn.send(JSON.stringify(data));
             $("#msg").val("");
         });
+
+        $("#leave-chat").click(function() {
+            var userId = $("#userId").val();
+            $.ajax({
+                url: "action.php",
+                method: "post",
+                data: "userId=" + userId + "&action=leave"
+            }).done(function(result) {
+                var data = JSON.parse(result);
+                if (data.status == 1) {
+                    conn.close();
+                    location = "index.php";
+                } else {
+                    console.log(data.msg);
+                }
+
+            });
+
+        })
     });
 </script>
 
