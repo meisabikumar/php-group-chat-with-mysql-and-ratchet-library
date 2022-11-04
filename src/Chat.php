@@ -43,10 +43,10 @@ class Chat implements MessageComponentInterface
         $data['dt']  = date("d-m-Y h:i:s");
 
         foreach ($this->clients as $client) {
-            if ($from !== $client) {
+            // if ($from !== $client) {
                 // The sender is not the receiver, send to each client connected
                 $client->send(json_encode($data));
-            }
+            // }
         }
     }
 
