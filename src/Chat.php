@@ -7,7 +7,6 @@ use Ratchet\ConnectionInterface;
 
 require "../db/Users.php";
 require "../db/Chatrooms.php";
-
 class Chat implements MessageComponentInterface
 {
     protected $clients;
@@ -15,7 +14,7 @@ class Chat implements MessageComponentInterface
     public function __construct()
     {
         $this->clients = new \SplObjectStorage;
-        echo "Server Started";
+        echo "Server Started.";
     }
 
     public function onOpen(ConnectionInterface $conn)
@@ -50,7 +49,7 @@ class Chat implements MessageComponentInterface
             $data['dt']  = date("d-m-Y h:i:s");
         }
 
-        foreach ($this->clients as $client) {      
+        foreach ($this->clients as $client) {
             if ($from == $client) {
                 $data['from']  = "Me";
             } else {

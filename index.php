@@ -37,7 +37,14 @@
                 if ($objUser->save()) {
                     $lastId = $objUser->dbConn->lastInsertId();
                     $objUser->setId($lastId);
-                    $_SESSION['user'][$userData['id']] = (array) $objUser;
+                    $_SESSION['user'][$lastId] = [
+                        'id' => $objUser->getId(),
+                        'name' => $objUser->getName(),
+                        'email' => $objUser->getEmail(),
+                        'login_status' => $objUser->getLoginStatus(),
+                        'last_login' => $objUser->getLastLogin()
+                    ];
+
                     echo "User Registred..";
                     header("location: chatroom.php");
                 } else {

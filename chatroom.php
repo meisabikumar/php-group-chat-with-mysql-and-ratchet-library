@@ -24,10 +24,10 @@
                 require("db/Users.php");
                 require("db/Chatrooms.php");
 
-                $objChatroom = new chatrooms;
+                $objChatroom = new Chatrooms;
                 $chatrooms   = $objChatroom->getAllChatRooms();
 
-                $objUser = new users;
+                $objUser = new Users;
                 $users   = $objUser->getAllUsers();
                 ?>
                 <table class="table table-striped">
@@ -103,13 +103,11 @@
             </div>
         </div>
     </div>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </body>
 
-<script>
+<script type="text/javascript">
     $(document).ready(function() {
-
         var conn = new WebSocket('ws://localhost:8080');
         conn.onopen = function(e) {
             console.log("Connection established!");
@@ -123,8 +121,8 @@
         };
 
         conn.onclose = function(e) {
-			console.log("Connection Closed!");
-		}
+            console.log("Connection Closed!");
+        }
 
         $("#send").click(function() {
             var userId = $("#userId").val();
@@ -155,7 +153,7 @@
             });
 
         })
-    });
+    })
 </script>
 
 </html>
