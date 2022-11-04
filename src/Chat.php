@@ -4,6 +4,7 @@ namespace MyApp;
 
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
+require "../db/users.php";
 
 class Chat implements MessageComponentInterface
 {
@@ -33,11 +34,18 @@ class Chat implements MessageComponentInterface
             $numRecv,
             $numRecv == 1 ? '' : 's'
         );
+        $data = json_decode($msg, true);
+        $objUser = new \users;
+        $objUser->setId($data['userId']);
+        $user = $objUser->getUserById();
+        $data['from'] = $user['name'];
+        $data['msg']  = $data['msg'];
+        $data['dt']  = date("d-m-Y h:i:s");
 
         foreach ($this->clients as $client) {
             if ($from !== $client) {
                 // The sender is not the receiver, send to each client connected
-                $client->send($msg);
+                $client->send(json_encode($data));
             }
         }
     }
