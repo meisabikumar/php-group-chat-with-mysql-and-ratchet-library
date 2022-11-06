@@ -53,25 +53,20 @@
             }
         }
         ?>
-        <div class="row join-room justify-content-center">
-            <div class="col-md-6">
+        <div class="row join-room justify-content-center mt-5">
+            <div class="col-md-4">
                 <form id="join-room-frm" role="form" method="post" action="" class="form-horizontal">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-addon addon-diff-color">
-                                <span class="glyphicon glyphicon-user"></span>
-                            </div>
-                            <input type="text" class="form-control" id="uname" name="uname" placeholder="Enter Name">
-                        </div>
+
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="uname" name="uname" placeholder="Enter Name">
                     </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-addon addon-diff-color">
-                                <span class="glyphicon glyphicon-envelope"></span>
-                            </div>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" value="">
-                        </div>
+
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" placeholder="name@example.com">
                     </div>
+
                     <div class="form-group">
                         <input type="submit" value="JOIN CHATROOM" class="btn btn-success btn-block" id="join" name="join">
                     </div>
