@@ -12,9 +12,9 @@
 
 <body>
     <div class="container">
-        <h2 class="text-center" style="margin-top: 5px; padding-top: 0;">Chat application in PHP & MySQL using Ratchet Library</h2>
+        <h2 class="text-center" style="margin-top: 5px; padding-top: 0;">Chat application using Ratchet Library</h2>
         <hr>
-        <div class="row">
+        <div class="row mt-5">
             <div class="col-md-4">
                 <?php
                 session_start();
@@ -30,73 +30,95 @@
                 $objUser = new Users;
                 $users   = $objUser->getAllUsers();
                 ?>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <td>
+
+                <div>
+                    <div class="card mb-4">
+                        <div class="card-body d-flex justify-content-between">
+                            <div>
                                 <?php
                                 foreach ($_SESSION['user'] as $key => $user) {
                                     $userId = $key;
                                     echo '<input type="hidden" name="userId" id="userId" value="' . $key . '">';
-                                    echo "<div>" . $user['name'] . "</div>";
-                                    echo "<div>" . $user['email'] . "</div>";
+                                    echo '<h5 class="card-title">' . $user['name'] . "</h5>";
+                                    echo '<p class="card-text">' . $user['email'] . "</p>";
                                 }
                                 ?>
-                            </td>
-                            <td align="right" colspan="2">
-                                <input type="button" class="btn btn-warning" id="leave-chat" name="leave-chat" value="Leave">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th colspan="3">Users</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        foreach ($users as $key => $user) {
-                            $color = 'color: red';
-                            if ($user['login_status'] == 1) {
-                                $color = 'color: green';
+                            </div>
+                            <input type="button" class="btn btn-warning" id="leave-chat" name="leave-chat" value="Leave">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <strong> List of Users</strong>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <?php
+                            foreach ($users as $key => $user) {
+                                $color = 'bg-danger';
+                                if ($user['login_status'] == 1) {
+                                    $color = '.bg-success';
+                                }
+                                if (!isset($_SESSION['user'][$user['id']])) {
+
+                                    echo '<li class="list-group-item ' . $color . ' ">
+                                    <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="fw-bold">' . $user['name'] . '</div>
+                                        <div class="fst-italic"> ' . $user['email'] . '</div>
+                                    </div>                                        
+                                        <div>
+                                            <div  class="fw-light">Last Login : </div>
+                                            <div class="fst-italic">' . $user['last_login'] . ' </div>
+                                        </div>
+                                    </div>
+                                </li>';
+                                }
                             }
-                            if (!isset($_SESSION['user'][$user['id']])) {
-                                echo "<tr><td>" . $user['name'] . "</td>";
-                                echo "<td><span class='glyphicon glyphicon-globe' style='" . $color . "'></span></td>";
-                                echo "<td>" . $user['last_login'] . "</td></tr>";
-                            }
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+
+
             </div>
             <div class="col-md-8">
-                <div id="messages">
-                    <table id="chats" class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th colspan="4" scope="col"><strong>Chat Room</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div class="card mb-4">
+                    <div id="messages">
+                        <div id="chats" class="p-2">
                             <?php
                             foreach ($chatrooms as $key => $chatroom) {
 
                                 if ($userId == $chatroom['userid']) {
                                     $from = "Me";
+                                    $class = "alert-success ms-auto";
                                 } else {
                                     $from = $chatroom['name'];
+                                    $class = "alert-primary me-auto";
                                 }
-                                echo '<tr><td valign="top"><div><strong>' . $from . '</strong></div><div>' . $chatroom['msg'] . '</div><td align="right" valign="top">' . date("d/m/Y h:i:s A", strtotime($chatroom['created_on'])) . '</td></tr>';
+
+                                echo ' 
+                                    <div class="alert w-75 ' . $class . '" role="alert">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="text-capitalize fw-bold"> ' . $from . ' :</div>
+                                            <div class="fst-italic fw-light">' . date("d/m/Y h:i:s A", strtotime($chatroom['created_on'])) . '</div>
+                                        </div>
+                                        <div>' . $chatroom['msg'] . '</div>
+                                    </div>
+                                ';
                             }
                             ?>
-                        </tbody>
-                    </table>
+                        </div>
+
+                    </div>
                 </div>
+
 
                 <form id="chat-room-frm" method="post" action="">
                     <div class="form-group">
                         <textarea class="form-control" id="msg" name="msg" placeholder="Enter Message"></textarea>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <input type="button" value="Send" class="btn btn-success btn-block" id="send" name="send">
                     </div>
                 </form>
@@ -116,8 +138,14 @@
         conn.onmessage = function(e) {
             console.log(e.data);
             var data = JSON.parse(e.data);
-            var row = '<tr><td valign="top"><div><strong>' + data.from + '</strong></div><div>' + data.msg + '</div><td align="right" valign="top">' + data.dt + '</td></tr>';
-            $('#chats > tbody').prepend(row);
+            var row = `       <div class="alert alert-success w-75 ms-auto" role="alert">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="text-capitalize fw-bold"> ${data.from} :</div>
+                                        <div class="fst-italic fw-light">${data.dt} </div>
+                                    </div>
+                                    <div>${data.msg} </div>
+                                </div>`;
+            $('#chats').append(row);
         };
 
         conn.onclose = function(e) {
