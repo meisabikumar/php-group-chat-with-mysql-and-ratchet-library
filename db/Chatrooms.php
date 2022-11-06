@@ -63,7 +63,7 @@ class Chatrooms
 
 	public function getAllChatRooms()
 	{
-		$stmt = $this->dbConn->prepare("SELECT c.*, u.name FROM chatrooms c JOIN users u ON(c.userid = u.id) ORDER BY c.id DESC");
+		$stmt = $this->dbConn->prepare("SELECT c.*, u.name FROM chatrooms c JOIN users u ON(c.userid = u.id) ORDER BY c.id ASC");
 		$stmt->execute();
 		$chatrooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		return $chatrooms;
