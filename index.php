@@ -12,7 +12,7 @@
 
 <body>
     <div class="container">
-        <h2 class="text-center" style="margin-top: 5px; padding-top: 0;">Chat application in PHP & MySQL using Ratchet Library</h2>
+        <h2 class="text-center" style="margin-top: 5px; padding-top: 0;">Chat application using Ratchet Library</h2>
         <hr>
         <?php
         if (isset($_POST['join'])) {
