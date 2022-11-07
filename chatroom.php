@@ -15,7 +15,7 @@
         <h2 class="text-center" style="margin-top: 5px; padding-top: 0;">Chat application using Ratchet Library</h2>
         <hr>
         <div class="row mt-5">
-            <div class="col-md-4">
+            <div class="col-md-4 py-4">
                 <?php
                 session_start();
                 if (!isset($_SESSION['user'])) {
@@ -57,7 +57,7 @@
                             foreach ($users as $key => $user) {
                                 $color = 'bg-danger';
                                 if ($user['login_status'] == 1) {
-                                    $color = '.bg-success';
+                                    $color = 'bg-success';
                                 }
                                 if (!isset($_SESSION['user'][$user['id']])) {
 
@@ -82,8 +82,8 @@
 
 
             </div>
-            <div class="col-md-8">
-                <div class="card mb-4">
+            <div class="col-md-8 py-4">
+                <div class="card mb-4" style="height: 400px;overflow: auto;">
                     <div id="messages">
                         <div id="chats" class="p-2">
                             <?php
@@ -138,7 +138,8 @@
         conn.onmessage = function(e) {
             console.log(e.data);
             var data = JSON.parse(e.data);
-            var row = `       <div class="alert alert-success w-75 ms-auto" role="alert">
+            var classname = data.from == 'Me'? 'alert-success ms-auto': 'alert-primary me-auto';
+            var row = `       <div class="alert w-75 ${classname}" role="alert">
                                     <div class="d-flex justify-content-between">
                                         <div class="text-capitalize fw-bold"> ${data.from} :</div>
                                         <div class="fst-italic fw-light">${data.dt} </div>
